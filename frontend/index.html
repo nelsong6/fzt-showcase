@@ -15,13 +15,14 @@
 
     <div class="terminal-window">
       <div class="title-bar">
-        <div class="traffic-lights">
-          <span class="dot dot-close"></span>
-          <span class="dot dot-minimize"></span>
-          <span class="dot dot-maximize"></span>
-        </div>
+        <span class="title-icon">C:\&gt;</span>
         <span class="title-text">fzh</span>
         <button id="btn-toggle-yaml" class="toggle-yaml" title="Edit YAML data">YAML</button>
+        <div class="window-controls">
+          <button class="win-btn win-minimize" aria-label="Minimize">&#x2500;</button>
+          <button class="win-btn win-maximize" aria-label="Maximize">&#x25A1;</button>
+          <button class="win-btn win-close" aria-label="Close">&#x2715;</button>
+        </div>
       </div>
       <pre id="terminal" tabindex="0"></pre>
     </div>

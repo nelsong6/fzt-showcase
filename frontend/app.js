@@ -362,7 +362,7 @@ function measureChar() {
   const probe = document.createElement("pre");
   probe.style.cssText =
     "position:absolute;left:-9999px;top:-9999px;white-space:pre;" +
-    "font-family:var(--terminal-font);font-size:14px;line-height:1.2;" +
+    "font-family:var(--terminal-font);font-size:16px;line-height:1.2;" +
     "padding:0;margin:0;border:0";
   probe.textContent = "MMMMMMMMMM"; // 10 chars for better averaging
   document.body.appendChild(probe);

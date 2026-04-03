@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "mkdir -p dist && cp index.html style.css app.js wasm_exec.js fzh.wasm dist/",
+    "build": "mkdir -p dist && cp index.html style.css app.js wasm_exec.js fzh.wasm SymbolsNerdFontMono-Regular.ttf PerfectDOSVGA437.ttf dist/",
     "build:wasm": "cd ../../../fuzzy-tiered && GOOS=js GOARCH=wasm go build -o ../fuzzy-tiers-showcase/frontend/fzh.wasm ./cmd/wasm",
     "test": "echo \"No tests\" && exit 0",
     "lint": "echo \"No linter\" && exit 0"
