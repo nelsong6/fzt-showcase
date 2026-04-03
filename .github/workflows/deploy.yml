@@ -46,7 +46,7 @@ jobs:
       working-directory: ./frontend
       run: |
         mkdir -p dist
-        cp index.html style.css app.js wasm_exec.js fzh.wasm dist/
+        cp index.html style.css app.js wasm_exec.js fzh.wasm SymbolsNerdFontMono-Regular.ttf dist/
 
     - name: Get Static Web App Deployment Token
       id: static-web-app-token
