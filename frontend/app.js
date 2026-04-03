@@ -277,6 +277,69 @@ function renderGrid(grid, cursorX, cursorY) {
   const pre = document.getElementById("terminal");
   const frag = document.createDocumentFragment();
 
+  // DOS command history — builds the illusion of a real terminal session
+  const history = [
+    { cmd: "type README.TXT", output: "fzh \u2014 A fuzzy finder with hierarchical navigation.\nType to search, arrow keys to navigate, Enter to drill in or open." },
+    { cmd: "dir /B *.LNK", links: [
+      { text: "GitHub", href: "https://github.com/nelsong6/fuzzy-tiered" },
+      { text: "Source", href: "https://github.com/nelsong6/fuzzy-tiers-showcase" },
+      { text: "YAML", id: "btn-toggle-yaml" },
+    ]},
+    { cmd: "fzh.exe" },
+  ];
+
+  for (const entry of history) {
+    // Prompt + command line
+    const cmdDiv = document.createElement("div");
+    cmdDiv.className = "cmd-history";
+    const p = document.createElement("span");
+    p.textContent = "C:\\> ";
+    p.style.color = "var(--fg-dim)";
+    cmdDiv.appendChild(p);
+    const c = document.createElement("span");
+    c.textContent = entry.cmd;
+    c.style.color = "var(--accent)";
+    cmdDiv.appendChild(c);
+    frag.appendChild(cmdDiv);
+
+    // Output lines (plain text, may be multiline)
+    if (entry.output) {
+      for (const line of entry.output.split("\n")) {
+        const outDiv = document.createElement("div");
+        outDiv.className = "cmd-output";
+        outDiv.textContent = line;
+        frag.appendChild(outDiv);
+      }
+    }
+
+    // Output line (links)
+    if (entry.links) {
+      const outDiv = document.createElement("div");
+      outDiv.className = "cmd-output";
+      entry.links.forEach((link, i) => {
+        if (i > 0) outDiv.appendChild(document.createTextNode("  "));
+        if (link.href) {
+          const a = document.createElement("a");
+          a.href = link.href;
+          a.target = "_blank";
+          a.textContent = link.text;
+          a.className = "cmd-link";
+          outDiv.appendChild(a);
+        } else if (link.id) {
+          const btn = document.createElement("button");
+          btn.id = link.id;
+          btn.textContent = link.text;
+          btn.className = "cmd-link-btn";
+          outDiv.appendChild(btn);
+        }
+      });
+      frag.appendChild(outDiv);
+    }
+  }
+
+  // Blank line before TUI output
+  frag.appendChild(document.createElement("div"));
+
   for (let y = 0; y < grid.length; y++) {
     const row = grid[y];
     const rowDiv = document.createElement("div");
@@ -331,6 +394,7 @@ function renderGrid(grid, cursorX, cursorY) {
       if (isCursorCell) {
         styles.push("background:var(--cursor)");
         styles.push("color:var(--bg-panel)");
+        span.className = "cursor";
         lastBg = "var(--cursor)";
       } else {
         lastBg = cell.bg;
@@ -421,7 +485,15 @@ function renderFrame(result) {
   rendering = true;
   try {
     const grid = parseANSI(result.ansi);
-    renderGrid(grid, result.cursorX, result.cursorY);
+    // When Go hides the cursor (-1,-1), place a blinking cursor at the
+    // prompt position (after "│> ") for the MSDOS aesthetic.
+    let cx = result.cursorX;
+    let cy = result.cursorY;
+    if (cx < 0 || cy < 0) {
+      cx = 3; // after "│> "
+      cy = 1; // prompt row (row 0 is top border)
+    }
+    renderGrid(grid, cx, cy);
   } finally {
     rendering = false;
   }
