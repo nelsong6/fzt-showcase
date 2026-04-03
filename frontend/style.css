@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Symbols Nerd Font Mono";
+  src: url("SymbolsNerdFontMono-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -8,25 +16,17 @@
   --bg: #1a1b26;
   --bg-panel: #16161e;
   --bg-header: #1f2335;
-  --bg-selected: #283457;
-  --bg-hover: #1f2335;
   --fg: #c0caf5;
   --fg-dim: #565f89;
-  --fg-comment: #565f89;
-  --green: #9ece6a;
-  --cyan: #7dcfff;
-  --yellow: #e0af68;
-  --blue: #7aa2f7;
-  --magenta: #bb9af7;
-  --red: #f7768e;
   --border: #3b4261;
-  --prompt: #9ece6a;
+  --cursor: #c0caf5;
+  --terminal-font: "Cascadia Code", "JetBrains Mono", "Fira Code", "SF Mono", "Consolas", "Symbols Nerd Font Mono", monospace;
 }
 
 body {
-  font-family: "Cascadia Code", "JetBrains Mono", "Fira Code", "SF Mono", "Consolas", monospace;
+  font-family: var(--terminal-font);
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1;
   background: var(--bg);
   color: var(--fg);
   height: 100vh;
@@ -49,7 +49,7 @@ body {
   border-right: 1px solid var(--border);
 }
 
-.finder-panel {
+.terminal-panel {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -71,7 +71,7 @@ body {
 }
 
 .panel-title {
-  color: var(--blue);
+  color: #7aa2f7;
   font-weight: bold;
   font-size: 12px;
   text-transform: uppercase;
@@ -118,130 +118,25 @@ body {
   color: var(--fg-dim);
 }
 
-.finder-prompt {
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  background: var(--bg-panel);
-  border-bottom: 1px solid var(--border);
-}
-
-.prompt-char {
-  color: var(--prompt);
-  font-weight: bold;
-  margin-right: 8px;
-}
-
-#finder-input {
+/* Terminal element — the core of the faithful rendering */
+#terminal {
   flex: 1;
-  background: transparent;
+  min-height: 0;
+  background: var(--bg-panel);
   color: var(--fg);
-  border: none;
-  font-family: inherit;
+  font-family: var(--terminal-font);
   font-size: 14px;
-  outline: none;
-}
-
-#finder-input::placeholder {
-  color: var(--fg-dim);
-}
-
-.scope-path {
-  color: var(--fg-dim);
-  font-size: 12px;
-}
-
-.item-count {
-  color: var(--fg-dim);
-  font-size: 11px;
-  margin-left: auto;
-}
-
-.finder-results {
-  flex: 1;
-  overflow-y: auto;
-  background: var(--bg-panel);
-}
-
-.finder-results::-webkit-scrollbar {
-  width: 6px;
-}
-
-.finder-results::-webkit-scrollbar-track {
-  background: var(--bg-panel);
-}
-
-.finder-results::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
-}
-
-.result-row {
-  display: flex;
-  align-items: baseline;
-  padding: 2px 12px;
-  cursor: pointer;
-  white-space: nowrap;
+  line-height: 1.2;
+  padding: 0;
+  margin: 0;
   overflow: hidden;
+  white-space: pre;
+  outline: none;
+  cursor: text;
 }
 
-.result-row:hover {
-  background: var(--bg-hover);
-}
-
-.result-row.selected {
-  background: var(--bg-selected);
-}
-
-.result-name {
-  color: var(--fg);
-  margin-right: 16px;
-  min-width: 0;
-}
-
-.result-name .match {
-  color: var(--green);
-  font-weight: bold;
-}
-
-.result-desc {
-  color: var(--fg-dim);
-  font-size: 13px;
-  min-width: 0;
-}
-
-.result-desc .match {
-  color: var(--yellow);
-  font-weight: bold;
-}
-
-.result-folder {
-  color: var(--cyan);
-}
-
-.result-folder::after {
-  content: " \203A";
-  color: var(--fg-dim);
-  margin-left: 2px;
-}
-
-.finder-help {
-  display: flex;
-  gap: 16px;
-  padding: 6px 12px;
-  background: var(--bg-header);
-  border-top: 1px solid var(--border);
-  font-size: 11px;
-  color: var(--fg-dim);
-}
-
-kbd {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  padding: 0 4px;
-  font-family: inherit;
-  font-size: 10px;
+#terminal span {
+  white-space: pre;
 }
 
 .loading {
