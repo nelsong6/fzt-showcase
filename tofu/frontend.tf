@@ -13,7 +13,7 @@ resource "azurerm_static_web_app" "app" {
 }
 
 locals {
-  front_app_dns_name = "fzh"
+  front_app_dns_name = "fzt"
 }
 
 resource "azurerm_dns_cname_record" "frontend" {

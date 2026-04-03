@@ -279,13 +279,13 @@ function renderGrid(grid, cursorX, cursorY) {
 
   // DOS command history — builds the illusion of a real terminal session
   const history = [
-    { cmd: "type README.TXT", output: "fzh \u2014 A fuzzy finder with hierarchical navigation.\nType to search, arrow keys to navigate, Enter to drill in or open." },
+    { cmd: "type README.TXT", output: "fzt \u2014 A fuzzy finder with hierarchical navigation.\nType to search, arrow keys to navigate, Enter to drill in or open." },
     { cmd: "dir /B *.LNK", links: [
       { text: "GitHub", href: "https://github.com/nelsong6/fuzzy-tiered" },
       { text: "Source", href: "https://github.com/nelsong6/fuzzy-tiers-showcase" },
       { text: "YAML", id: "btn-toggle-yaml" },
     ]},
-    { cmd: "fzh.exe" },
+    { cmd: "fzt.exe" },
   ];
 
   for (const entry of history) {
@@ -459,7 +459,7 @@ function computeGridSize() {
 }
 
 // ── Key translator ──
-// Maps browser keydown event to args for fzh.handleKey(key, ctrl, shift)
+// Maps browser keydown event to args for fzt.handleKey(key, ctrl, shift)
 function shouldForwardKey(e) {
   // Don't forward if focus is in the YAML editor
   if (document.activeElement === document.getElementById("yaml-editor")) {
@@ -502,7 +502,7 @@ function renderFrame(result) {
 async function init() {
   const go = new Go();
   const result = await WebAssembly.instantiateStreaming(
-    fetch("fzh.wasm"),
+    fetch("fzt.wasm"),
     go.importObject
   );
   go.run(result.instance);
@@ -540,9 +540,9 @@ async function init() {
     e.preventDefault();
 
     try {
-      const result = fzh.handleKey(e.key, e.ctrlKey, e.shiftKey);
+      const result = fzt.handleKey(e.key, e.ctrlKey, e.shiftKey);
       if (result instanceof Error) {
-        console.error("fzh.handleKey error:", result.message);
+        console.error("fzt.handleKey error:", result.message);
         return;
       }
       renderFrame(result);
@@ -562,9 +562,9 @@ async function init() {
       const key = cols + "x" + rows;
       if (key === lastGridSize) return;
       lastGridSize = key;
-      const result = fzh.resize(cols, rows);
+      const result = fzt.resize(cols, rows);
       if (result instanceof Error) {
-        console.error("fzh.resize error:", result.message);
+        console.error("fzt.resize error:", result.message);
         return;
       }
       renderFrame(result);
@@ -577,14 +577,14 @@ async function init() {
 
 function applyYAML() {
   const yaml = document.getElementById("yaml-editor").value;
-  const loadResult = fzh.loadYAML(yaml);
+  const loadResult = fzt.loadYAML(yaml);
   if (loadResult instanceof Error) {
     showError(loadResult.message);
     return;
   }
   const { cols, rows } = computeGridSize();
   lastGridSize = cols + "x" + rows;
-  const result = fzh.init(cols, rows);
+  const result = fzt.init(cols, rows);
   if (result instanceof Error) {
     showError(result.message);
     return;

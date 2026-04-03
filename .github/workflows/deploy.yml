@@ -33,7 +33,7 @@ jobs:
 
     - name: Build WASM
       working-directory: ./fuzzy-tiered
-      run: GOOS=js GOARCH=wasm go build -o ../frontend/fzh.wasm ./cmd/wasm
+      run: GOOS=js GOARCH=wasm go build -o ../frontend/fzt.wasm ./cmd/wasm
 
     - name: Azure Login via OIDC
       uses: azure/login@v2
@@ -46,7 +46,7 @@ jobs:
       working-directory: ./frontend
       run: |
         mkdir -p dist
-        cp index.html style.css app.js wasm_exec.js fzh.wasm SymbolsNerdFontMono-Regular.ttf PerfectDOSVGA437.ttf dist/
+        cp index.html style.css app.js wasm_exec.js fzt.wasm SymbolsNerdFontMono-Regular.ttf PerfectDOSVGA437.ttf dist/
 
     - name: Get Static Web App Deployment Token
       id: static-web-app-token
