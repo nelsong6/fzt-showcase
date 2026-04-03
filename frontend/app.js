@@ -418,6 +418,16 @@ async function init() {
   // Load YAML and init session
   applyYAML();
 
+  // YAML drawer toggle
+  const drawer = document.getElementById("yaml-drawer");
+  document.getElementById("btn-toggle-yaml").addEventListener("click", () => {
+    drawer.classList.toggle("hidden");
+    if (!drawer.classList.contains("hidden")) editor.focus();
+  });
+  document.getElementById("btn-close-yaml").addEventListener("click", () => {
+    drawer.classList.add("hidden");
+  });
+
   // YAML editor buttons
   document.getElementById("btn-sample").addEventListener("click", () => {
     editor.value = SAMPLE_YAML;
@@ -446,16 +456,6 @@ async function init() {
     } catch (err) {
       console.error("handleKey threw:", err);
     }
-  });
-
-  // Focus management
-  document.getElementById("terminal").addEventListener("click", () => {
-    termFocused = true;
-    document.getElementById("yaml-editor").blur();
-  });
-
-  document.getElementById("yaml-editor").addEventListener("focus", () => {
-    termFocused = false;
   });
 
   // Responsive resize — only re-render when grid dimensions actually change

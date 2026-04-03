@@ -7,25 +7,38 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="panel yaml-panel">
-      <div class="panel-header">
-        <span class="panel-title">YAML</span>
-        <div class="panel-actions">
-          <button id="btn-sample" title="Load sample data">sample</button>
-          <button id="btn-apply" title="Apply YAML changes">apply</button>
+  <div class="page">
+    <header class="hero">
+      <h1>fzh</h1>
+      <p class="tagline">A fuzzy finder with hierarchical navigation. Type to search, arrow keys to navigate, Enter to drill in or open.</p>
+    </header>
+
+    <div class="terminal-window">
+      <div class="title-bar">
+        <div class="traffic-lights">
+          <span class="dot dot-close"></span>
+          <span class="dot dot-minimize"></span>
+          <span class="dot dot-maximize"></span>
+        </div>
+        <span class="title-text">fzh</span>
+        <button id="btn-toggle-yaml" class="toggle-yaml" title="Edit YAML data">YAML</button>
+      </div>
+      <pre id="terminal" tabindex="0"></pre>
+    </div>
+
+    <div id="yaml-drawer" class="yaml-drawer hidden">
+      <div class="drawer-header">
+        <span class="drawer-title">Sample Data</span>
+        <div class="drawer-actions">
+          <button id="btn-sample">reset</button>
+          <button id="btn-apply">apply</button>
+          <button id="btn-close-yaml" class="btn-close" title="Close">&times;</button>
         </div>
       </div>
       <textarea id="yaml-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
     </div>
-    <div class="divider"></div>
-    <div class="panel terminal-panel">
-      <div class="panel-header">
-        <span class="panel-title">fzh</span>
-      </div>
-      <pre id="terminal" tabindex="0"></pre>
-    </div>
   </div>
+
   <div id="loading" class="loading">Loading fzh WASM...</div>
   <script src="wasm_exec.js"></script>
   <script src="app.js"></script>

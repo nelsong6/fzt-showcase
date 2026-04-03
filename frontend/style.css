@@ -13,112 +13,127 @@
 }
 
 :root {
-  --bg: #1a1b26;
+  --bg: #0d1017;
   --bg-panel: #16161e;
-  --bg-header: #1f2335;
+  --bg-titlebar: #1f2335;
   --fg: #c0caf5;
   --fg-dim: #565f89;
+  --fg-muted: #3b4261;
   --border: #3b4261;
   --cursor: #c0caf5;
+  --accent: #7aa2f7;
   --terminal-font: "Cascadia Code", "JetBrains Mono", "Fira Code", "SF Mono", "Consolas", "Symbols Nerd Font Mono", monospace;
 }
 
 body {
   font-family: var(--terminal-font);
   font-size: 14px;
-  line-height: 1;
+  line-height: 1.4;
   background: var(--bg);
   color: var(--fg);
   height: 100vh;
   overflow: hidden;
-}
-
-.container {
-  display: flex;
-  height: 100vh;
-}
-
-.panel {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.yaml-panel {
-  flex: 0 0 40%;
-  border-right: 1px solid var(--border);
-}
-
-.terminal-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.divider {
-  width: 1px;
-  background: var(--border);
-}
-
-.panel-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 6px 12px;
-  background: var(--bg-header);
-  border-bottom: 1px solid var(--border);
-  min-height: 32px;
+  justify-content: center;
 }
 
-.panel-title {
-  color: #7aa2f7;
-  font-weight: bold;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.panel-actions {
-  margin-left: auto;
+/* ── Page layout ── */
+.page {
   display: flex;
-  gap: 6px;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 960px;
+  height: 100vh;
+  padding: 24px 24px 16px;
+  gap: 16px;
 }
 
-.panel-actions button {
-  background: var(--bg);
+/* ── Hero text ── */
+.hero {
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.hero h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+
+.hero .tagline {
+  font-size: 13px;
   color: var(--fg-dim);
-  border: 1px solid var(--border);
-  padding: 2px 8px;
+  margin-top: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ── Terminal window ── */
+.terminal-window {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.title-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--bg-titlebar);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  flex-shrink: 0;
+  gap: 10px;
+}
+
+.traffic-lights {
+  display: flex;
+  gap: 7px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.dot-close { background: #ff5f57; }
+.dot-minimize { background: #febc2e; }
+.dot-maximize { background: #28c840; }
+
+.title-text {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  color: var(--fg-dim);
+  font-weight: 500;
+}
+
+.toggle-yaml {
+  background: transparent;
+  color: var(--fg-dim);
+  border: 1px solid var(--fg-muted);
+  padding: 2px 10px;
   font-family: inherit;
   font-size: 11px;
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: 4px;
+  transition: color 0.15s, border-color 0.15s;
 }
 
-.panel-actions button:hover {
+.toggle-yaml:hover {
   color: var(--fg);
   border-color: var(--fg-dim);
 }
 
-#yaml-editor {
-  flex: 1;
-  background: var(--bg-panel);
-  color: var(--fg);
-  border: none;
-  padding: 12px;
-  font-family: inherit;
-  font-size: 13px;
-  line-height: 1.6;
-  resize: none;
-  outline: none;
-  tab-size: 2;
-}
-
-#yaml-editor::placeholder {
-  color: var(--fg-dim);
-}
-
-/* Terminal element — the core of the faithful rendering */
 #terminal {
   flex: 1;
   min-height: 0;
@@ -139,6 +154,91 @@ body {
   white-space: pre;
 }
 
+/* ── YAML drawer (overlay) ── */
+.yaml-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 420px;
+  height: 100vh;
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.yaml-drawer.hidden {
+  transform: translateX(100%);
+  pointer-events: none;
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--bg-titlebar);
+  border-bottom: 1px solid var(--border);
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.drawer-title {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.drawer-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.drawer-actions button {
+  background: var(--bg);
+  color: var(--fg-dim);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.drawer-actions button:hover {
+  color: var(--fg);
+  border-color: var(--fg-dim);
+}
+
+.btn-close {
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 4px;
+  border: none !important;
+  background: transparent !important;
+}
+
+#yaml-editor {
+  flex: 1;
+  background: var(--bg-panel);
+  color: var(--fg);
+  border: none;
+  padding: 12px;
+  font-family: var(--terminal-font);
+  font-size: 13px;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+  tab-size: 2;
+}
+
+/* ── Loading overlay ── */
 .loading {
   position: fixed;
   top: 0;
