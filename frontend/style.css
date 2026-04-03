@@ -83,6 +83,24 @@ body {
   font-family: var(--terminal-font);
 }
 
+.hero-links {
+  margin-top: 6px;
+  font-size: 13px;
+  font-family: var(--terminal-font);
+  color: #555;
+}
+
+.hero-links a {
+  color: #4a9a4a;
+  text-decoration: none;
+  transition: color 0.15s, text-shadow 0.15s;
+}
+
+.hero-links a:hover {
+  color: var(--accent);
+  text-shadow: 0 0 6px var(--glow);
+}
+
 /* ── Terminal window ── */
 .terminal-window {
   flex: 1;
