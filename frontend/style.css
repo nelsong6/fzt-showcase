@@ -150,6 +150,10 @@ body {
   cursor: text;
 }
 
+#terminal div {
+  white-space: pre;
+}
+
 #terminal span {
   white-space: pre;
 }

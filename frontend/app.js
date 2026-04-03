@@ -239,8 +239,16 @@ function parseANSI(ansi) {
       // Handle surrogate pairs (nerd font icons in supplementary planes)
       const cp = row.codePointAt(i);
       const char = String.fromCodePoint(cp);
-      cells.push({ char, fg, bg, bold, italic, dim, underline });
+      const wide = cp > 0xFFFF;
+      cells.push({ char, fg, bg, bold, italic, dim, underline, wide });
       i += char.length;
+    }
+    // Mark padding cells after double-width characters so the renderer can
+    // merge icon + padding into a single 2ch span.
+    for (let j = 0; j < cells.length; j++) {
+      if (cells[j].wide && j + 1 < cells.length && cells[j + 1].char === " ") {
+        cells[j + 1].widePad = true;
+      }
     }
     grid.push(cells);
   }
@@ -271,6 +279,8 @@ function renderGrid(grid, cursorX, cursorY) {
 
   for (let y = 0; y < grid.length; y++) {
     const row = grid[y];
+    const rowDiv = document.createElement("div");
+    let lastBg = null;
     let i = 0;
     while (i < row.length) {
       const start = i;
@@ -279,10 +289,17 @@ function renderGrid(grid, cursorX, cursorY) {
 
       i++; // always consume at least one cell
 
+      // Wide char: also consume its padding cell into the same span
+      if (cell.wide && i < row.length && row[i].widePad) {
+        i++;
+      }
       // Extend the run if this isn't the cursor cell (cursor gets its own span)
-      if (!isCursorCell) {
+      // Wide characters and their padding get their own span
+      else if (!isCursorCell && !cell.wide) {
         while (
           i < row.length &&
+          !row[i].wide &&
+          !row[i].widePad &&
           row[i].fg === cell.fg &&
           row[i].bg === cell.bg &&
           row[i].bold === cell.bold &&
@@ -309,20 +326,26 @@ function renderGrid(grid, cursorX, cursorY) {
       if (cell.italic) styles.push("font-style:italic");
       if (cell.dim) styles.push("opacity:0.6");
       if (cell.underline) styles.push("text-decoration:underline");
+      if (cell.wide) styles.push("display:inline-block;width:calc(2 * var(--char-w));overflow:hidden;text-align:center;font-family:'Symbols Nerd Font Mono',var(--terminal-font);vertical-align:bottom;line-height:1.2");
 
       if (isCursorCell) {
         styles.push("background:var(--cursor)");
         styles.push("color:var(--bg-panel)");
+        lastBg = "var(--cursor)";
+      } else {
+        lastBg = cell.bg;
       }
 
       if (styles.length > 0) {
         span.setAttribute("style", styles.join(";"));
       }
-      frag.appendChild(span);
+      rowDiv.appendChild(span);
     }
-    if (y < grid.length - 1) {
-      frag.appendChild(document.createTextNode("\n"));
+    // Extend the last cell's background to fill the fractional pixel gap
+    if (lastBg) {
+      rowDiv.style.background = lastBg;
     }
+    frag.appendChild(rowDiv);
   }
 
   pre.innerHTML = "";
@@ -351,6 +374,8 @@ function measureChar() {
 
   if (w >= 4 && h >= 8) {
     cachedCharSize = { w, h };
+    // Expose as CSS custom property for use in inline styles on icon spans
+    document.documentElement.style.setProperty("--char-w", w + "px");
     return cachedCharSize;
   }
   // Fallback for monospace 14px
