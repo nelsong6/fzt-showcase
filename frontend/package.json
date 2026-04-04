@@ -1,10 +1,10 @@
 {
-  "name": "fuzzy-tiers-showcase",
+  "name": "fzt-showcase",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "build": "mkdir -p dist && cp index.html style.css app.js wasm_exec.js fzt.wasm SymbolsNerdFontMono-Regular.ttf PerfectDOSVGA437.ttf dist/",
-    "build:wasm": "cd ../../../fuzzy-tiered && GOOS=js GOARCH=wasm go build -o ../fuzzy-tiers-showcase/frontend/fzt.wasm ./cmd/wasm",
+    "build:wasm": "cd ../../../fzt && GOOS=js GOARCH=wasm go build -o ../fzt-showcase/frontend/fzt.wasm ./cmd/wasm",
     "test": "echo \"No tests\" && exit 0",
     "lint": "echo \"No linter\" && exit 0"
   }

@@ -22,10 +22,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Download fzt WASM from latest release
+    - name: Download fzt assets from latest release
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release download --repo nelsong6/fuzzy-tiered --pattern "fzt.wasm" --dir frontend
+      run: gh release download --repo nelsong6/fzt --pattern "fzt.wasm" --pattern "fzt-terminal.js" --dir frontend
 
     - name: Azure Login via OIDC
       uses: azure/login@v2
@@ -38,7 +38,7 @@ jobs:
       working-directory: ./frontend
       run: |
         mkdir -p dist
-        cp index.html style.css app.js wasm_exec.js fzt.wasm SymbolsNerdFontMono-Regular.ttf PerfectDOSVGA437.ttf dist/
+        cp index.html style.css app.js fzt-terminal.js wasm_exec.js fzt.wasm SymbolsNerdFontMono-Regular.ttf PerfectDOSVGA437.ttf dist/
 
     - name: Get Static Web App Deployment Token
       id: static-web-app-token
