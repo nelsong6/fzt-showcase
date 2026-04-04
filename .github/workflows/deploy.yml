@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'frontend/**'
+  repository_dispatch:
+    types: [fzt-updated]
   workflow_dispatch:
 
 permissions:
@@ -20,20 +22,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Checkout fuzzy-tiered
-      uses: actions/checkout@v4
-      with:
-        repository: nelsong6/fuzzy-tiered
-        path: fuzzy-tiered
-
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version-file: fuzzy-tiered/go.mod
-
-    - name: Build WASM
-      working-directory: ./fuzzy-tiered
-      run: GOOS=js GOARCH=wasm go build -o ../frontend/fzt.wasm ./cmd/wasm
+    - name: Download fzt WASM from latest release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh release download --repo nelsong6/fuzzy-tiered --pattern "fzt.wasm" --dir frontend
 
     - name: Azure Login via OIDC
       uses: azure/login@v2
