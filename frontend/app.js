@@ -279,10 +279,10 @@ function renderGrid(grid, cursorX, cursorY) {
 
   // DOS command history — builds the illusion of a real terminal session
   const history = [
-    { cmd: "type README.TXT", output: "fzt \u2014 A fuzzy finder with hierarchical navigation.\nType to search, arrow keys to navigate, Enter to drill in or open." },
+    { cmd: "type README.TXT", output: "fzt \u2014 A {fuzzy finder}(https://github.com/junegunn/fzf) with hierarchical navigation.\nType to search, arrow keys to navigate, Enter to drill in or open." },
     { cmd: "dir /B *.LNK", links: [
-      { text: "GitHub", href: "https://github.com/nelsong6/fuzzy-tiered" },
-      { text: "Source", href: "https://github.com/nelsong6/fuzzy-tiers-showcase" },
+      { text: "GitHub", href: "https://github.com/nelsong6/fzt" },
+      { text: "Source", href: "https://github.com/nelsong6/fzt-showcase" },
       { text: "YAML", id: "btn-toggle-yaml" },
     ]},
     { cmd: "fzt.exe" },
@@ -302,12 +302,26 @@ function renderGrid(grid, cursorX, cursorY) {
     cmdDiv.appendChild(c);
     frag.appendChild(cmdDiv);
 
-    // Output lines (plain text, may be multiline)
+    // Output lines (plain text with optional {text}(url) inline links)
     if (entry.output) {
       for (const line of entry.output.split("\n")) {
         const outDiv = document.createElement("div");
         outDiv.className = "cmd-output";
-        outDiv.textContent = line;
+        const linkRe = /\{([^}]+)\}\(([^)]+)\)/g;
+        let last = 0;
+        let match;
+        while ((match = linkRe.exec(line)) !== null) {
+          if (match.index > last) outDiv.appendChild(document.createTextNode(line.slice(last, match.index)));
+          const a = document.createElement("a");
+          a.href = match[2];
+          a.target = "_blank";
+          a.textContent = match[1];
+          a.className = "cmd-link";
+          outDiv.appendChild(a);
+          last = match.index + match[0].length;
+        }
+        if (last < line.length) outDiv.appendChild(document.createTextNode(line.slice(last)));
+        if (last === 0) outDiv.textContent = line;
         frag.appendChild(outDiv);
       }
     }
