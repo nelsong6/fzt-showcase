@@ -242,7 +242,7 @@ const term = createFztTerminal(terminalEl, {
   palette: PALETTE,
   fontFamily: "var(--terminal-font)",
   nerdFontFamily: "'Symbols Nerd Font Mono',var(--terminal-font)",
-  cursorClass: "cursor",
+  cursorClass: "fzt-cursor",
   defaultCursorPos: { x: 3, y: 1 },
   shouldForwardKey: (e) => {
     return document.activeElement !== document.getElementById("yaml-editor");

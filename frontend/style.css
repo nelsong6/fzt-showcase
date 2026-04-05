@@ -32,6 +32,11 @@
   --accent: #33ff33;
   --glow: #33ff33;
   --terminal-font: "Perfect DOS VGA 437", "Cascadia Code", "JetBrains Mono", "Fira Code", "SF Mono", "Consolas", "Symbols Nerd Font Mono", monospace;
+
+  /* Override shared fzt-terminal.css variables */
+  --fzt-bg: var(--bg-panel);
+  --fzt-fg: var(--fg);
+  --fzt-font: var(--terminal-font);
 }
 
 body {
@@ -99,41 +104,15 @@ body {
   text-shadow: 0 0 6px var(--glow);
 }
 
-/* ── Terminal window ── */
+/* ── Terminal window (layout additions to shared .fzt-terminal-window) ── */
 .terminal-window {
   flex: 1;
   min-height: 0;
   width: 100%;
   display: flex;
   flex-direction: column;
-  border-radius: 12px / 14px;
-  overflow: hidden;
   border: none;
-  position: relative;
-  box-shadow:
-    0 0 30px rgba(0, 0, 0, 0.6),
-    inset 0 0 60px rgba(0, 0, 0, 0.15);
 }
-
-/* CRT scanline overlay + vignette */
-.terminal-window::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.15) 2px,
-      rgba(0, 0, 0, 0.15) 4px
-    ),
-    radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.35) 100%);
-  pointer-events: none;
-  z-index: 10;
-  border-radius: inherit;
-}
-
 
 .cmd-history {
   white-space: pre;
@@ -143,34 +122,6 @@ body {
 #terminal {
   flex: 1;
   min-height: 0;
-  background: var(--bg-panel);
-  color: var(--fg);
-  font-family: var(--terminal-font);
-  font-size: 16px;
-  line-height: 1.2;
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-  white-space: pre;
-  outline: none;
-  cursor: text;
-}
-
-#terminal div {
-  white-space: pre;
-}
-
-@keyframes blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-
-#terminal .cursor {
-  animation: blink 1s step-end infinite;
-}
-
-#terminal span {
-  white-space: pre;
 }
 
 /* ── YAML drawer (overlay) ── */

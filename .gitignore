@@ -2,3 +2,4 @@ node_modules/
 dist/
 *.wasm
 frontend/fzt-terminal.js
+frontend/fzt-terminal.css
