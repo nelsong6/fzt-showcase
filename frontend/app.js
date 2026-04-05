@@ -1,4 +1,4 @@
-import { createFztTerminal } from './fzt-terminal.js';
+import { createFztWeb } from './fzt-web.js';
 
 const SAMPLE_YAML = `- name: Programming Languages
   description: Popular languages and their ecosystems
@@ -238,12 +238,8 @@ function buildCommandHistory() {
 // ── Main ──────────────────────────────────────────────────────
 const terminalEl = document.getElementById("terminal");
 
-const term = createFztTerminal(terminalEl, {
+const term = createFztWeb(terminalEl, {
   palette: PALETTE,
-  fontFamily: "var(--terminal-font)",
-  nerdFontFamily: "'Symbols Nerd Font Mono',var(--terminal-font)",
-  cursorClass: "fzt-cursor",
-  defaultCursorPos: { x: 3, y: 1 },
   shouldForwardKey: (e) => {
     return document.activeElement !== document.getElementById("yaml-editor");
   },

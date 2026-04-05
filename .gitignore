@@ -3,3 +3,4 @@ dist/
 *.wasm
 frontend/fzt-terminal.js
 frontend/fzt-terminal.css
+frontend/fzt-web.js

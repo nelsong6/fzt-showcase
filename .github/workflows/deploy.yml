@@ -25,7 +25,7 @@ jobs:
     - name: Download fzt assets from latest release
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release download --repo nelsong6/fzt --pattern "fzt.wasm" --pattern "fzt-terminal.js" --pattern "fzt-terminal.css" --dir frontend
+      run: gh release download --repo nelsong6/fzt --pattern "fzt.wasm" --pattern "fzt-terminal.js" --pattern "fzt-terminal.css" --pattern "fzt-web.js" --dir frontend
 
     - name: Azure Login via OIDC
       uses: azure/login@v2
@@ -38,7 +38,7 @@ jobs:
       working-directory: ./frontend
       run: |
         mkdir -p dist
-        cp index.html style.css app.js fzt-terminal.js fzt-terminal.css wasm_exec.js fzt.wasm SymbolsNerdFontMono-Regular.ttf PerfectDOSVGA437.ttf dist/
+        cp index.html style.css app.js fzt-terminal.js fzt-terminal.css fzt-web.js wasm_exec.js fzt.wasm SymbolsNerdFontMono-Regular.ttf PerfectDOSVGA437.ttf dist/
 
     - name: Get Static Web App Deployment Token
       id: static-web-app-token
