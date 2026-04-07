@@ -1,6 +1,6 @@
 # fzt-showcase
 
-Interactive web demo of [fzt](https://github.com/nelsong6/fzt) (fuzzy hierarchical finder). Runs the actual Go scoring engine via WASM in the browser.
+Interactive web demo of [fzt](https://github.com/nelsong6/fzt-terminal) (fuzzy hierarchical finder). Runs the actual Go scoring engine via WASM in the browser.
 
 No auth. Frontend-only (no backend, no database). Will eventually be absorbed into my-homepage.
 
@@ -8,13 +8,13 @@ No auth. Frontend-only (no backend, no database). Will eventually be absorbed in
 
 - **WASM bridge** lives in `fzt/cmd/wasm/main.go` — compiles fzt's full TUI renderer, scorer, YAML loader, and event handling into a `.wasm` binary. Exposes a stateful session: `init(cols, rows)`, `handleKey(key, ctrl, shift)`, `resize(cols, rows)` — returns ANSI-escaped frames + cursor position.
 - **Frontend** is vanilla HTML/CSS/JS in `frontend/` — the entire page is a windowless DOS terminal session. A JS-rendered command history (`type README.TXT`, `dir /B *.LNK`, `fzt.exe`) provides context and navigation links above the TUI output. CRT effects (scanlines, vignette, barrel distortion) overlay the content. DOS pixel font, phosphor green glow, blinking cursor. No title bar or window chrome — the terminal appears directly on the dark background. YAML editor lives in a slide-out drawer toggled via a link in the command history. Leaf selection opens URLs in new tabs.
-- **Build** copies static files + WASM binary to `dist/`; the WASM is downloaded from fzt releases during CI
+- **Build** copies static files + WASM binary to `dist/`; the WASM is downloaded from fzt-terminal releases during CI
 - **Nerd font support**: Self-hosted `SymbolsNerdFontMono-Regular.ttf` provides fallback glyphs for nerd font icons (folder/file). Icon spans get explicit `font-family` assignment and are rendered as `inline-block` at exactly `2×charW` pixels to match Go/tcell's double-width cell allocation. The ANSI parser marks wide characters (codepoint > U+FFFF) and merges each icon with its tcell padding cell into a single span.
 - **DOS font**: Self-hosted `PerfectDOSVGA437.ttf` (Perfect DOS VGA 437) is the primary terminal font, giving the demo an authentic MS-DOS retro look. Font smoothing is disabled for crisp pixel rendering.
 
 ## Building
 
-WASM binary (from fzt repo, for local dev):
+WASM binary (from fzt-terminal repo, for local dev):
 ```
 cd /d/repos/fzt && GOOS=js GOARCH=wasm go build -o /d/repos/fzt-showcase/frontend/fzt.wasm ./cmd/wasm
 ```
@@ -26,4 +26,4 @@ cd frontend && npm ci && npm run build
 
 ## Deployment
 
-Azure Static Web App via GitHub Actions. CI downloads `fzt.wasm` from the latest fzt release, then deploys `frontend/dist/`.
+Azure Static Web App via GitHub Actions. CI downloads `fzt.wasm` from the latest fzt-terminal release, then deploys `frontend/dist/`.
