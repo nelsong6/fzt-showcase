@@ -24,6 +24,10 @@ Frontend:
 cd frontend && npm ci && npm run build
 ```
 
+## Relationship to my-homepage
+
+Both consume fzt-terminal's WASM binary and JS/CSS assets. The showcase is a standalone demo (no auth, no backend, hardcoded bookmarks in command history); my-homepage is a full bookmark manager with auth, API, blob storage, and the ref system. Both receive `repository_dispatch` from fzt-terminal's CI on new releases. The showcase will eventually be absorbed into my-homepage.
+
 ## Deployment
 
 Azure Static Web App via GitHub Actions. CI downloads `fzt.wasm` from the latest fzt-terminal release, then deploys `frontend/dist/`.
