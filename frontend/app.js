@@ -289,7 +289,7 @@ async function init() {
 function applyYAML() {
   const yaml = document.getElementById("yaml-editor").value;
   if (!term.loadYAML(yaml)) return;
-  term.initSession();
+  term.init();
 }
 
 init();
