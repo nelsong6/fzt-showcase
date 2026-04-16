@@ -63,22 +63,18 @@ jobs:
         output_location: ""
         skip_app_build: true
 
-    - name: Verify deployment and report version
+    - name: Verify deployment
       env:
         FZT_VERSION: ${{ steps.fzt-version.outputs.fzt_version }}
       run: |
         echo "Verifying version.json is live..."
         for i in $(seq 1 30); do
-          LIVE=$(curl -s https://fzh.romaine.life/version.json 2>/dev/null || echo "{}")
+          LIVE=$(curl -s https://fzt.romaine.life/version.json 2>/dev/null || echo "{}")
           if echo "$LIVE" | grep -q "$FZT_VERSION"; then
             echo "Version verified: $FZT_VERSION"
-            curl -s -X POST https://api.romaine.life/ci/deployed \
-              -H "Content-Type: application/json" \
-              -d "{\"site\":\"fzh.romaine.life\",\"repo\":\"fzt-showcase\",\"versions\":$LIVE}"
-            echo "Reported to CI dashboard"
             exit 0
           fi
           echo "Attempt $i: waiting for CDN... (got: $LIVE)"
           sleep 5
         done
-        echo "::warning::Version verification timed out — dashboard not updated"
+        echo "::warning::Version verification timed out"
