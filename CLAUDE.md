@@ -26,7 +26,7 @@ cd frontend && npm ci && npm run build
 
 ## Relationship to my-homepage
 
-Both consume fzt-terminal's WASM binary and JS/CSS assets. The showcase is a standalone demo (no auth, no backend, hardcoded bookmarks in command history); my-homepage is a full bookmark manager with auth, API, blob storage, and the ref system. Both receive `repository_dispatch` from fzt-terminal's CI on new releases. The showcase will eventually be absorbed into my-homepage.
+Both consume fzt-browser's WASM binary and JS/CSS assets. The showcase is a standalone demo (no auth, no backend, hardcoded bookmarks in command history); my-homepage is a full bookmark manager with auth, API, blob storage, and the ref system. A new fzt-browser release does not auto-redeploy either consumer — retrigger manually (`gh workflow run deploy.yml -R nelsong6/fzt-showcase`) to pick up fresh assets. The showcase will eventually be absorbed into my-homepage.
 
 ## Deployment
 
