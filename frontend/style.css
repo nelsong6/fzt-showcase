@@ -34,7 +34,10 @@
   --terminal-font: "Perfect DOS VGA 437", "Cascadia Code", "JetBrains Mono", "Fira Code", "SF Mono", "Consolas", "Symbols Nerd Font Mono", monospace;
 
   /* Override shared fzt-terminal.css variables */
-  --fzt-bg: var(--bg-panel);
+  /* Transparent so the ambience rain canvas (behind .page) shows through
+     the terminal area — drops mingle with text naturally, appearing in
+     empty glyph space, occluded by characters that rasterize on top. */
+  --fzt-bg: transparent;
   --fzt-fg: var(--fg);
   --fzt-font: var(--terminal-font);
 }
@@ -55,6 +58,16 @@ body {
   font-smooth: never;
 }
 
+/* ── Ambience canvas (rain overlay, behind all content) ── */
+#ambience-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
 /* ── Page layout ── */
 .page {
   display: flex;
@@ -65,6 +78,9 @@ body {
   height: 100vh;
   padding: 24px 24px 16px;
   gap: 0;
+  /* Sit above the ambience canvas */
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Command history (rendered in JS) ── */

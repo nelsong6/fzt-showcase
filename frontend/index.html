@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <canvas id="ambience-canvas"></canvas>
   <div class="page">
     <div class="terminal-window fzt-terminal-window">
       <pre id="terminal" tabindex="0"></pre>
@@ -28,6 +29,8 @@
 
   <div id="loading" class="loading">Loading fzt WASM...</div>
   <script src="wasm_exec.js"></script>
+  <script src="ambience-sim.js"></script>
+  <script src="ambience-client.js"></script>
   <script type="module" src="app.js"></script>
 </body>
 </html>
