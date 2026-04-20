@@ -34,12 +34,17 @@
   --terminal-font: "Perfect DOS VGA 437", "Cascadia Code", "JetBrains Mono", "Fira Code", "SF Mono", "Consolas", "Symbols Nerd Font Mono", monospace;
 
   /* Override shared fzt-terminal.css variables */
-  /* Transparent so the ambience rain canvas (behind .page) shows through
-     the terminal area — drops mingle with text naturally, appearing in
-     empty glyph space, occluded by characters that rasterize on top. */
-  --fzt-bg: transparent;
+  --fzt-bg: var(--bg-panel);
   --fzt-fg: var(--fg);
   --fzt-font: var(--terminal-font);
+}
+
+/* When the ambience rain layer is present, let drops show through the
+   terminal area by making fzt's background transparent. ambience-client.js
+   adds body.ambience-on on successful init — so if a consumer removes the
+   canvas or ambience fails to load, the terminal keeps its solid bg. */
+body.ambience-on {
+  --fzt-bg: transparent;
 }
 
 body {
