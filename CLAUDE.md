@@ -12,6 +12,12 @@ No auth. Frontend-only (no backend, no database). Will eventually be absorbed in
 - **Nerd font support**: Self-hosted `SymbolsNerdFontMono-Regular.ttf` provides fallback glyphs for nerd font icons (folder/file). Icon spans get explicit `font-family` assignment and are rendered as `inline-block` at exactly `2×charW` pixels to match Go/tcell's double-width cell allocation. The ANSI parser marks wide characters (codepoint > U+FFFF) and merges each icon with its tcell padding cell into a single span.
 - **DOS font**: Self-hosted `PerfectDOSVGA437.ttf` (Perfect DOS VGA 437) is the primary terminal font, giving the demo an authentic MS-DOS retro look. Font smoothing is disabled for crisp pixel rendering.
 
+## Ambience integration
+
+`<canvas id="ambience-canvas" data-ambience>` sits before `.page` in the body and gets rain drops painted behind the DOS terminal. Canvas is `position: fixed; z-index: 0; pointer-events: none`; `.page` at `z-index: 1` so it sits above. `--fzt-bg` overridden to `transparent` under `body.ambience-on` so drops show through the terminal area — text glyphs rasterize opaque on top, cells with explicit bg (highlighted rows) block rain naturally. Uses the shared `ambience-sim.js` + `ambience-client.js` (vendored from `ambience` repo at `cmd/ambience/web/`); the client auto-inits on any `<canvas data-ambience>` and adds `body.ambience-on` on success — if ambience JS fails to fetch, the terminal keeps its solid bg and doesn't render broken. Entropy: keystrokes POSTed to `ambience.romaine.life/entropy` every 2s.
+
+The vendored ambience files must be kept in sync when upstream `ambience` sim/client change; copy from `/d/repos/ambience/cmd/ambience/web/`.
+
 ## Building
 
 WASM binary (from fzt-terminal repo, for local dev):
