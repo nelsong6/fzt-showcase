@@ -44,10 +44,14 @@
 	const ENTROPY_ENABLED = canvas.dataset.ambienceEntropy !== 'off';
 
 	const ctx = canvas.getContext('2d');
+	let ambienceOn = false;
 
-	// Mark body so consumer CSS can conditionally adapt (e.g. make terminal
-	// backgrounds transparent only when ambience is actually running).
-	document.body.classList.add('ambience-on');
+	function enableAmbienceStyles() {
+		if (ambienceOn) return;
+		// Only punch through consumer backgrounds once the shared feed is live.
+		document.body.classList.add('ambience-on');
+		ambienceOn = true;
+	}
 
 	function resize() {
 		const dpr = window.devicePixelRatio || 1;
@@ -84,8 +88,13 @@
 					effectType = newType;
 					sim = new ctor(GRID_W, GRID_H, {});
 				}
-				try { sim.restoreSnapshot(data); } catch (err) { console.error('bad snapshot', err); }
-				ready = true;
+				try {
+					sim.restoreSnapshot(data);
+					ready = true;
+					enableAmbienceStyles();
+				} catch (err) {
+					console.error('bad snapshot', err);
+				}
 				break;
 			}
 			case 'config':

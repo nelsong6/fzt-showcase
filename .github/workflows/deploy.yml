@@ -20,6 +20,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v6
 
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
     - name: Download fzt assets from latest release
       id: fzt-version
       env:
@@ -40,9 +45,7 @@ jobs:
 
     - name: Build frontend
       working-directory: ./frontend
-      run: |
-        mkdir -p dist
-        cp index.html style.css app.js fzt-terminal.js fzt-terminal.css fzt-web.js wasm_exec.js fzt.wasm SymbolsNerdFontMono-Regular.ttf PerfectDOSVGA437.ttf version.json dist/
+      run: npm run build
 
     - name: Get Static Web App Deployment Token
       id: static-web-app-token
